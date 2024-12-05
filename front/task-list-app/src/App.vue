@@ -1,7 +1,7 @@
 <template>
   <HeaderPage/>
   <TaskList :tasks="tasks"/>
-  <TaskForm/>
+  <TaskForm :createTask="createTask"/>
 
 </template>
 
@@ -10,7 +10,7 @@ import {defineComponent, onMounted, ref} from 'vue';
 import TaskList from './components/TaskList.vue';
 import TaskForm from './components/TaskForm.vue';
 import HeaderPage from './components/HeaderPage.vue';
-import {getAllTasks} from "@/api";
+import {getAllTasks ,createTask} from "@/api";
 
 export default defineComponent({
   name: 'App',
@@ -25,7 +25,10 @@ export default defineComponent({
       tasks.value = await getAllTasks();
     })
 
-    return {tasks};
+    return {
+      tasks,
+      createTask
+    };
   },
 
 });

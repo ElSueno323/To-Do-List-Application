@@ -1,6 +1,13 @@
 <script setup lang="ts">
-
+  import {defineProps} from 'vue';
   import {ref} from "vue";
+
+  const propscollect= defineProps({
+    createTask: {
+      type: Function,
+      required: true
+    }
+  })
 
   const newtask= ref({
     name:'',
@@ -15,7 +22,7 @@
 <template>
 
   <div class="container">
-    <form @submit.prevent="">
+    <form @submit.prevent="createTask(newtask)">
       <div class="form-group">
         <label for="taskName">Task Name</label>
         <input
