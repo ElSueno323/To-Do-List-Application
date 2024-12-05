@@ -6,6 +6,14 @@ const propscollect = defineProps({
   tasks: {
     type: Array,
     required: true
+  },
+  deleteTask: {
+    type: Function,
+    required: true
+  },
+  markTask: {
+    type: Function,
+    required: true
   }
 })
 
@@ -43,7 +51,7 @@ function getPriorityColor(priority_level: number) {
         <td>
           <button v-if="task.status === 'pending'"
                   class="btn btn-outline-info btn-sm"
-          @click="markTask(task.id)">
+          @click="propscollect.markTask(task.id)">
             {{ task.status }}
           </button>
           <button v-else class="btn btn-secondary btn-sm" disabled>
@@ -52,7 +60,7 @@ function getPriorityColor(priority_level: number) {
         </td>
         <td>{{ task.due_time }}</td>
         <td>
-          <button class="btn btn-outline-danger btn-sm" @click="deleteTask(task.id)">
+          <button class="btn btn-outline-danger btn-sm" @click="propscollect.deleteTask(task.id)">
             x
           </button>
         </td>

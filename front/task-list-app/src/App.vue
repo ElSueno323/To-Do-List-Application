@@ -1,7 +1,10 @@
 <template>
   <HeaderPage/>
-  <TaskList :tasks="tasks" :deleteTask="deleteTask" :markTask="markTask"/>
-  <TaskForm :createTask="createTask"/>
+  <TaskList :tasks="tasks"
+            :deleteTask="deleteTaskRefresh"
+            :markTask="markTaskRefresh"
+  />
+  <TaskForm :createTask="createTaskRefresh"/>
 
 </template>
 
@@ -24,12 +27,25 @@ export default defineComponent({
     onMounted(async ()=>{
       tasks.value = await getAllTasks();
     })
+    const createTaskRefresh = async (task:any) => {
+      await createTask(task);
+      tasks.value = await getAllTasks();
+    }
+    const deleteTaskRefresh = async (id:any) => {
+      await deleteTask(id);
+      tasks.value = await getAllTasks();
+    }
+
+    const markTaskRefresh = async (id:any) => {
+      await markTask(id);
+      tasks.value = await getAllTasks();
+    }
 
     return {
       tasks,
-      createTask,
-      deleteTask,
-      markTask
+      createTaskRefresh,
+      deleteTaskRefresh,
+      markTaskRefresh
     };
   },
 
