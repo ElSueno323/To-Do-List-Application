@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import startAppDataBase, {createDataBase} from "./app";
+import {initializeDataBase} from "./app";
 import defaultRouter from "./routes";
 
 const app = express();
@@ -13,8 +13,7 @@ app.use(cors({
 app.use(express.json());
 
 
-//createDataBase();
-startAppDataBase();
+initializeDataBase();
 
 app.use('/',defaultRouter);
 

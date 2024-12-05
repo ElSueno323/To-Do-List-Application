@@ -8,29 +8,10 @@ const username = "postgres";
 const database= "bluetrees";
 
 /**
- * Asynchronously creates a new database and a corresponding tasks table.
- *
- * This function initializes a connection to a PostgreSQL database using
- * the specified connection parameters. It then creates a database named
- * `bluetrees` and defines a table called `tasks` with the specified columns
- * and data types.
- *
- * The `tasks` table includes the following columns:
- * - `id`: Serial primary key of type integer.
- * - `name`: Name of the task, a non-nullable string with a maximum length of 32.
- * - `description`: Optional task description with a maximum length of 255.
- * - `priority_level`: A decimal value representing the priority level of the task.
- * - `type`: Enumerated type indicating the status of the task, must be either 'completed' or 'pending'.
- * - `due_time`: A timestamp indicating the due time for the task.
- *
- * The function logs a success message upon successful creation of the database
- * and table. If an error occurs during the process, it logs an error message
- * and exits the process with a status code of 1.
- *
- * @async
- * @function createDataBase
+ * Initializes the database by checking its existence, creating it if it does not exist,
+ * and setting up the necessary tables and types.
  */
-export const createDataBase = async () => {
+export const initializeDataBase = async () => {
     const connectionDb = new DataSource({
         type: "postgres",
         host: "localhost",
@@ -43,24 +24,31 @@ export const createDataBase = async () => {
     })
     try{
         await connectionDb.initialize();
-        await connectionDb.query(`
-            CREATE DATABASE bluetrees ;
-        `);
-        await connectionDb.query(`
-            CREATE TYPE task_status AS ENUM (
-                'completed', 'pending'
-            );
+        const result = await connectionDb
+            .query("SELECT 1 FROM pg_database WHERE datname = 'bluetrees'");
 
-            CREATE TABLE task(
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(32) NOT NULL,
-                description VARCHAR(255),
-                priority_level DECIMAL(10, 2),
-                status task_status NOT NULL,
-                due_time TIMESTAMP
-            );
-        `)
-        console.log("Database Created : OK");
+        if (result.length === 0) {
+            await connectionDb.query(`CREATE DATABASE bluetrees;`);
+            console.log("Database 'bluetrees' created successfully.");
+
+            await connectionDb.query(`
+                CREATE TYPE task_status AS ENUM ('completed', 'pending');
+                CREATE TABLE task (
+                    id SERIAL PRIMARY KEY,
+                    name VARCHAR(32) NOT NULL,
+                    description VARCHAR(255),
+                    priority_level DECIMAL(10, 2),
+                    status task_status NOT NULL,
+                    due_time TIMESTAMP
+                );
+            `);
+            console.log("Table 'task' created successfully.");
+        } else {
+            console.log("Database 'bluetrees' already exists.");
+        }
+        console.log("Database : OK");
+
+        await startDataBase();
     }catch (err){
         console.log("Error DB ",err);
         process.exit(1);
@@ -84,7 +72,7 @@ export const createDataBase = async () => {
  * - Synchronize: true, allowing automatic schema synchronization
  * - Logging: true, enabling query and error logging
  */
-const startAppDataBase= async ()=> {
+const startDataBase= async ()=> {
     const connection = new DataSource({
         type: 'postgres',
         host: 'localhost',
@@ -101,8 +89,7 @@ const startAppDataBase= async ()=> {
         console.log("Connected to database : OK ");
 
         services = new InitService(connection);
-
-        console.log("Init to Service == DB : OK ");
+        console.log("Initialize Service == DB : OK ");
 
     }catch(err){
         console.log("Error DB : ",err);
@@ -110,5 +97,3 @@ const startAppDataBase= async ()=> {
     }
 
 };
-
-export default startAppDataBase;
