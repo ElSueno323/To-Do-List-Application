@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {defineProps} from 'vue';
-import {deleteTask} from "@/api";
+import {deleteTask, markTask} from "@/api";
 
 const propscollect = defineProps({
   tasks: {
@@ -40,7 +40,16 @@ function getPriorityColor(priority_level: number) {
         <td :class="getPriorityColor(task.priority_level)">
           {{ task.priority_level }}
         </td>
-        <td>{{ task.status }}</td>
+        <td>
+          <button v-if="task.status === 'pending'"
+                  class="btn btn-outline-info btn-sm"
+          @click="markTask(task.id)">
+            {{ task.status }}
+          </button>
+          <button v-else class="btn btn-secondary btn-sm" disabled>
+            {{ task.status }}
+          </button>
+        </td>
         <td>{{ task.due_time }}</td>
         <td>
           <button class="btn btn-outline-danger btn-sm" @click="deleteTask(task.id)">

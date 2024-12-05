@@ -37,4 +37,12 @@ async function deleteTask(id:number){
     }
 }
 
-export {getAllTasks, createTask ,deleteTask};
+async function markTask(id:number){
+    try{
+        await axios.patch(`${urlApi}/tasks/${id}`);
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export {getAllTasks, createTask ,deleteTask ,markTask};
