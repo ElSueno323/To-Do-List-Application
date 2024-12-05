@@ -7,4 +7,11 @@ export default class TasksService {
     constructor(dataSource: DataSource) {
         this.tasksRepository = dataSource.getRepository(Tasks);
     }
+
+    async getAllTasks(): Promise<Tasks[]> {
+        const query = this.tasksRepository
+            .createQueryBuilder('t')
+            .orderBy('due_time');
+        return await query.getMany();
+    }
 }

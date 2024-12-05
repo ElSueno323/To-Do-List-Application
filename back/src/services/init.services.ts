@@ -6,6 +6,5 @@ export default class InitService{
 
     constructor(dataSource: DataSource) {
         this.tasksService = new TasksService(dataSource);
-
     }
 }
