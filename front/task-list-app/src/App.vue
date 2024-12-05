@@ -1,15 +1,16 @@
 <template>
   <HeaderPage/>
-  <TaskList/>
+  <TaskList :tasks="tasks"/>
   <TaskForm/>
 
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import {defineComponent, onMounted, ref} from 'vue';
 import TaskList from './components/TaskList.vue';
 import TaskForm from './components/TaskForm.vue';
 import HeaderPage from './components/HeaderPage.vue';
+import {getAllTasks} from "@/api";
 
 export default defineComponent({
   name: 'App',
@@ -17,7 +18,16 @@ export default defineComponent({
     TaskList,
     HeaderPage,
     TaskForm,
-  }
+  },
+  setup(){
+    const tasks =ref([]);
+    onMounted(async ()=>{
+      tasks.value = await getAllTasks();
+    })
+
+    return {tasks};
+  },
+
 });
 </script>
 
