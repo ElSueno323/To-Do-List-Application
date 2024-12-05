@@ -1,17 +1,22 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <HeaderPage/>
+  <TaskList/>
+  <TaskForm/>
 
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import TaskList from './components/TaskList.vue';
+import TaskForm from './components/TaskForm.vue';
+import HeaderPage from './components/HeaderPage.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld,
+    TaskList,
+    HeaderPage,
+    TaskForm,
   }
 });
 </script>
