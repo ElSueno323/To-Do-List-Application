@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import startAppDataBase, {createDataBase} from "./app";
+import defaultRouter from "./routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,9 +14,7 @@ app.use(express.json());
 //createDataBase();
 startAppDataBase();
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello, world! This is a simple Node.js + TypeScript project.');
-});
+app.use('/',defaultRouter);
 
 
 app.listen(PORT, () => {
