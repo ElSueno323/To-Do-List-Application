@@ -1,4 +1,7 @@
 import {DataSource} from "typeorm";
+import InitService from "./services/init.services";
+
+export var services: InitService;
 
 const password ="123456";
 const username = "postgres";
@@ -96,6 +99,10 @@ const startAppDataBase= async ()=> {
     try{
         await connection.initialize();
         console.log("Connected to database : OK ");
+
+        services = new InitService(connection);
+
+        console.log("Init to Service == DB : OK ");
 
     }catch(err){
         console.log("Error DB : ",err);
