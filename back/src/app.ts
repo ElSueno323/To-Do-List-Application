@@ -34,6 +34,7 @@ export const createDataBase = async () => {
         port: 5432,
         username: username,
         password: password,
+        entities: ["src/models/*.ts"],
         synchronize: true,
         logging: true
     })
@@ -43,12 +44,16 @@ export const createDataBase = async () => {
             CREATE DATABASE bluetrees ;
         `);
         await connectionDb.query(`
-            CREATE TABLE tasks(
+            CREATE TYPE task_status AS ENUM (
+                'completed', 'pending'
+            );
+
+            CREATE TABLE task(
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(32) NOT NULL,
                 description VARCHAR(255),
                 priority_level DECIMAL(10, 2),
-                type ENUM('completed', 'pending') NOT NULL,
+                status task_status NOT NULL,
                 due_time TIMESTAMP
             );
         `)
@@ -93,7 +98,7 @@ const startAppDataBase= async ()=> {
         console.log("Connected to database : OK ");
 
     }catch(err){
-        console.log("Error DB ",err);
+        console.log("Error DB : ",err);
         process.exit(1);
     }
 

@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 
-createDataBase();
+//createDataBase();
 startAppDataBase();
 
 app.get('/', (req: Request, res: Response) => {
