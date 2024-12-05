@@ -29,4 +29,12 @@ async function createTask(task:Task){
     }
 }
 
-export {getAllTasks, createTask};
+async function deleteTask(id:number){
+    try{
+        await axios.delete(`${urlApi}/tasks/${id}`);
+    }catch(error){
+        console.log(error);
+    }
+}
+
+export {getAllTasks, createTask ,deleteTask};
